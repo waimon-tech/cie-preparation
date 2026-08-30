@@ -1,0 +1,161 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: 'Public Subnets in ap-southeast-1 default VPC'
+
+Resources:
+  customSGVPC2: # custom SG VPC
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: '172.31.0.0/16'
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+      InstanceTenancy: default
+      Tags: 
+        - Key: 'Name'
+          Value: 'custom-sg-vpc2'
+        - Key: 'Region'
+          Value: 'Singapore'
+        - Key: 'Environment'
+          Value: 'Non Production'  
+
+  publicSubnet1: # publicSubnet1
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: 'ap-southeast-1a'
+      CidrBlock: '172.31.48.0/20'
+      MapPublicIpOnLaunch: true
+      Tags: 
+        - Key: 'Name'
+          Value: 'default-public-subnet1'
+        - Key: 'Region'
+          Value: 'Singapore'
+        - Key: 'Environment'
+          Value: 'Non Production'    
+      VpcId: !Ref customSGVPC2
+  routeTableforPublicSubnet1: # route table for Public subnet 1
+    Type: AWS::EC2::RouteTable
+    Properties:
+      Tags: 
+        - Key: 'Name'
+          Value: 'Route Table For Public Subnet1'
+        - Key: 'Region'
+          Value: 'Singapore'
+        - Key: 'Environment'
+          Value: 'Non Production' 
+      VpcId: !Ref customSGVPC2
+  publicSubnet1Association: # RT association for public subnet 1
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref routeTableforPublicSubnet1
+      SubnetId: !Ref publicSubnet1
+
+
+  publicSubnet2: # publicSubnet2
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: 'ap-southeast-1b'
+      CidrBlock: '172.31.64.0/20'
+      MapPublicIpOnLaunch: true
+      Tags: 
+        - Key: 'Name'
+          Value: 'default-public-subnet2'
+        - Key: 'Region'
+          Value: 'Singapore'
+        - Key: 'Environment'
+          Value: 'Non Production'
+      VpcId: !Ref customSGVPC2
+  routeTableforPublicSubnet2: # route table for Public subnet 2
+    Type: AWS::EC2::RouteTable
+    Properties:
+      Tags: 
+        - Key: 'Name'
+          Value: 'Route Table For Public Subnet2'
+        - Key: 'Region'
+          Value: 'Singapore'
+        - Key: 'Environment'
+          Value: 'Non Production' 
+      VpcId: !Ref customSGVPC2
+  publicSubnet2Association: # RT association for public subnet 2
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref routeTableforPublicSubnet2
+      SubnetId: !Ref publicSubnet2
+
+
+  publicSubnet3: # publicSubnet3
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: 'ap-southeast-1c'
+      CidrBlock: '172.31.80.0/20'
+      MapPublicIpOnLaunch: true
+      Tags: 
+        - Key: 'Name'
+          Value: 'default-public-subnet3'
+        - Key: 'Region'
+          Value: 'Singapore'
+        - Key: 'Environment'
+          Value: 'Non Production'
+      VpcId: !Ref customSGVPC2
+  routeTableforPublicSubnet3: # route table for Public subnet 3
+    Type: AWS::EC2::RouteTable
+    Properties:
+      Tags: 
+        - Key: 'Name'
+          Value: 'Route Table For Public Subnet3'
+        - Key: 'Region'
+          Value: 'Singapore'
+        - Key: 'Environment'
+          Value: 'Non Production' 
+      VpcId: !Ref customSGVPC2
+  publicSubnet3Association: # RT association for public subnet 3
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref routeTableforPublicSubnet3
+      SubnetId: !Ref publicSubnet3
+
+  gritInternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: 'Name'
+          Value: 'Internet Gateway for Public Subnets'
+        - Key: 'Region'
+          Value: 'Singapore'
+        - Key: 'Environment'
+          Value: 'Non Production' 
+          
+  VPCAttachGateway:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId:
+        Ref: customSGVPC2
+      InternetGatewayId:
+        Ref: gritInternetGateway
+
+# Updating1 to add internet gateway route into route table
+  igwAddToRouteTable1:
+    Type: AWS::EC2::Route
+    Properties:
+       RouteTableId:
+         Ref: routeTableforPublicSubnet1
+       DestinationCidrBlock: 0.0.0.0/0
+       GatewayId:
+         Ref: gritInternetGateway
+
+# Updating2 to add internet gateway route into route table
+  igwAddToRouteTable2:
+    Type: AWS::EC2::Route
+    Properties:
+       RouteTableId:
+         Ref: routeTableforPublicSubnet2
+       DestinationCidrBlock: 0.0.0.0/0
+       GatewayId:
+         Ref: gritInternetGateway
+
+  igwAddToRouteTable3:
+    Type: AWS::EC2::Route
+    Properties:
+       RouteTableId:
+         Ref: routeTableforPublicSubnet3
+       DestinationCidrBlock: 0.0.0.0/0
+       GatewayId:
+         Ref: gritInternetGateway

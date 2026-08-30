@@ -1,0 +1,144 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: 'Private Subnets in ap-southeast-1 default VPC'
+
+Resources:
+  customSGVPC: # custom SG VPC
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: '172.31.0.0/16'
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+      InstanceTenancy: default
+      Tags: 
+        - Key: 'Name'
+          Value: 'custom-sg-vpc'
+        - Key: 'Region'
+          Value: 'Singapore'
+        - Key: 'Environment'
+          Value: 'Non Production'  
+
+  privateSubnet1: # privateSubnet1
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: 'ap-southeast-1a'
+      CidrBlock: '172.31.48.0/20'
+      MapPublicIpOnLaunch: false
+      Tags: 
+        - Key: 'Name'
+          Value: 'default-private-subnet1'
+        - Key: 'Region'
+          Value: 'Singapore'
+        - Key: 'Environment'
+          Value: 'Non Production'    
+      VpcId: !Ref customSGVPC
+  routeTableforPrivateSubnet1: # route table for Private subnet 1
+    Type: AWS::EC2::RouteTable
+    Properties:
+      Tags: 
+        - Key: 'Name'
+          Value: 'Route Table For Private Subnet1'
+        - Key: 'Region'
+          Value: 'Singapore'
+        - Key: 'Environment'
+          Value: 'Non Production' 
+      VpcId: !Ref customSGVPC
+  privateSubnet1Association: # RT association for private subnet 1
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref routeTableforPrivateSubnet1
+      SubnetId: !Ref privateSubnet1
+
+
+  privateSubnet2: # privateSubnet2
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: 'ap-southeast-1b'
+      CidrBlock: '172.31.64.0/20'
+      MapPublicIpOnLaunch: false
+      Tags: 
+        - Key: 'Name'
+          Value: 'default-private-subnet2'
+        - Key: 'Region'
+          Value: 'Singapore'
+        - Key: 'Environment'
+          Value: 'Non Production'
+      VpcId: !Ref customSGVPC
+  routeTableforPrivateSubnet2: # route table for Private subnet 2
+    Type: AWS::EC2::RouteTable
+    Properties:
+      Tags: 
+        - Key: 'Name'
+          Value: 'Route Table For Private Subnet2'
+        - Key: 'Region'
+          Value: 'Singapore'
+        - Key: 'Environment'
+          Value: 'Non Production' 
+      VpcId: !Ref customSGVPC
+  privateSubnet2Association: # RT association for private subnet 2
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref routeTableforPrivateSubnet2
+      SubnetId: !Ref privateSubnet2
+
+
+  privateSubnet3: # privateSubnet3
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: 'ap-southeast-1c'
+      CidrBlock: '172.31.80.0/20'
+      MapPublicIpOnLaunch: false
+      Tags: 
+        - Key: 'Name'
+          Value: 'default-private-subnet3'
+        - Key: 'Region'
+          Value: 'Singapore'
+        - Key: 'Environment'
+          Value: 'Non Production'
+      VpcId: !Ref customSGVPC
+  routeTableforPrivateSubnet3: # route table for Private subnet 3
+    Type: AWS::EC2::RouteTable
+    Properties:
+      Tags: 
+        - Key: 'Name'
+          Value: 'Route Table For Private Subnet3'
+        - Key: 'Region'
+          Value: 'Singapore'
+        - Key: 'Environment'
+          Value: 'Non Production' 
+      VpcId: !Ref customSGVPC
+  privateSubnet3Association: # RT association for private subnet 3
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref routeTableforPrivateSubnet3
+      SubnetId: !Ref privateSubnet3
+
+  privateSubnet4: # privateSubnet4
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: 'ap-southeast-1a'
+      CidrBlock: '172.31.96.0/20'
+      MapPublicIpOnLaunch: false
+      Tags: 
+        - Key: 'Name'
+          Value: 'default-private-subnet4'
+        - Key: 'Region'
+          Value: 'Singapore'
+        - Key: 'Environment'
+          Value: 'Non Production'
+      VpcId: !Ref customSGVPC
+  routeTableforPrivateSubnet4: #route table for Private subnet 4
+    Type: AWS::EC2::RouteTable
+    Properties:
+      Tags: 
+        - Key: 'Name'
+          Value: 'Route Table For Private Subnet4'
+        - Key: 'Region'
+          Value: 'Singapore'
+        - Key: 'Environment'
+          Value: 'Non Production' 
+      VpcId: !Ref customSGVPC
+  privateSubnet4Association: # RT association for private subnet 4
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref routeTableforPrivateSubnet4
+      SubnetId: !Ref privateSubnet4

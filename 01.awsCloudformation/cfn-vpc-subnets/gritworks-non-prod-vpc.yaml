@@ -1,0 +1,206 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: 'VPC in ap-southeast-1'
+
+Resources:
+  girtWorksNonprodVPC: # gritworks nonprod vpc
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: '192.168.0.0/16'
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+      InstanceTenancy: default
+      Tags: 
+        - Key: 'Name'
+          Value: 'gritworks-nonprod-vpc'
+  publicSubnet1: # publicSubnet1
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: 'ap-southeast-1a'
+      CidrBlock: '192.168.1.0/24'
+      MapPublicIpOnLaunch: true
+      Tags: 
+        - Key: 'Name'
+          Value: 'public-subnet1'
+        - Key: 'Region'
+          Value: 'Singapore'
+        - Key: 'Environment'
+          Value: 'Non Production'    
+      VpcId: !Ref girtWorksNonprodVPC     
+  publicSubnet2: # publicSubnet2
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: 'ap-southeast-1b'
+      CidrBlock: '192.168.2.0/24'
+      MapPublicIpOnLaunch: true
+      Tags: 
+        - Key: 'Name'
+          Value: 'public-subnet2'
+        - Key: 'Region'
+          Value: 'Singapore'
+        - Key: 'Environment'
+          Value: 'Non Production'    
+      VpcId: !Ref girtWorksNonprodVPC        
+  publicSubnet3: # publicSubnet3
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: 'ap-southeast-1c'
+      CidrBlock: '192.168.3.0/24'
+      MapPublicIpOnLaunch: true
+      Tags: 
+        - Key: 'Name'
+          Value: 'public-subnet3'
+        - Key: 'Region'
+          Value: 'Singapore'
+        - Key: 'Environment'
+          Value: 'Non Production'    
+      VpcId: !Ref girtWorksNonprodVPC
+  gritWorksNonprodIGW: # gritworks nonprod igw
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: 'Name'
+          Value: 'gritworks-nonprod IGW'
+  attachVPCAndIGW:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId:
+        Ref: girtWorksNonprodVPC
+      InternetGatewayId:
+        Ref: gritWorksNonprodIGW
+  defaultRouteToIGW:
+    Type: AWS::EC2::Route
+    Properties:
+       DestinationCidrBlock: 0.0.0.0/0
+       GatewayId:
+         Ref: gritWorksNonprodIGW
+       RouteTableId: 'rtb-01e48259b439261ce'
+
+# updating to crateing private subnets
+  privateSubnet1: # private Subnet1
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: 'ap-southeast-1a'
+      CidrBlock: '192.168.4.0/24'
+      MapPublicIpOnLaunch: false
+      Tags: 
+        - Key: 'Name'
+          Value: 'grit-private-subnet1'
+        - Key: 'Region'
+          Value: 'Singapore'
+        - Key: 'Environment'
+          Value: 'Non Production'    
+      VpcId: !Ref girtWorksNonprodVPC     
+  routeTableforPrivateSubnet1: # route table for Private subnet 1
+    Type: AWS::EC2::RouteTable
+    Properties:
+      Tags: 
+        - Key: 'Name'
+          Value: 'Grit Route Table For Private Subnet1'
+        - Key: 'Region'
+          Value: 'Singapore'
+        - Key: 'Environment'
+          Value: 'Non Production' 
+      VpcId: !Ref girtWorksNonprodVPC
+  privateSubnet1Association: # RT association for private subnet 1
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref routeTableforPrivateSubnet1
+      SubnetId: !Ref privateSubnet1
+
+  privateSubnet2: # privateSubnet2
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: 'ap-southeast-1b'
+      CidrBlock: '192.168.5.0/24'
+      MapPublicIpOnLaunch: false
+      Tags: 
+        - Key: 'Name'
+          Value: 'grit-private-subnet2'
+        - Key: 'Region'
+          Value: 'Singapore'
+        - Key: 'Environment'
+          Value: 'Non Production'    
+      VpcId: !Ref girtWorksNonprodVPC
+  routeTableforPrivateSubnet2: # route table for Private subnet 3
+    Type: AWS::EC2::RouteTable
+    Properties:
+      Tags: 
+        - Key: 'Name'
+          Value: 'Grit Route Table For Private Subnet2'
+        - Key: 'Region'
+          Value: 'Singapore'
+        - Key: 'Environment'
+          Value: 'Non Production' 
+      VpcId: !Ref girtWorksNonprodVPC    
+  privateSubnet2Association: # RT association for private subnet 1
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref routeTableforPrivateSubnet2
+      SubnetId: !Ref privateSubnet2
+      
+  privateSubnet3: # privateSubnet3
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: 'ap-southeast-1c'
+      CidrBlock: '192.168.6.0/24'
+      MapPublicIpOnLaunch: false
+      Tags: 
+        - Key: 'Name'
+          Value: 'grit-private-subnet3'
+        - Key: 'Region'
+          Value: 'Singapore'
+        - Key: 'Environment'
+          Value: 'Non Production'    
+      VpcId: !Ref girtWorksNonprodVPC
+  routeTableforPrivateSubnet3: # route table for Private subnet 3
+    Type: AWS::EC2::RouteTable
+    Properties:
+      Tags: 
+        - Key: 'Name'
+          Value: 'Grit Route Table For Private Subnet3'
+        - Key: 'Region'
+          Value: 'Singapore'
+        - Key: 'Environment'
+          Value: 'Non Production' 
+      VpcId: !Ref girtWorksNonprodVPC
+  privateSubnet3Association: # RT association for private subnet 3
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref routeTableforPrivateSubnet3
+      SubnetId: !Ref privateSubnet3
+
+# updating to add natgateway 
+  natGatewayEIP1:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: VPC
+      Tags: 
+        - Key: 'Name'
+          Value: 'NAT Gateway EIP1'
+  publicNatGateway1:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId: !GetAtt natGatewayEIP1.AllocationId
+      ConnectivityType: 'public'
+      SubnetId: !Ref publicSubnet1
+      Tags: 
+        - Key: 'Name'
+          Value: 'public-nat-gateway1'
+  privateRoute1ToNatGW1: # route table of private subnet 1 add route to associate Nat gateway 1
+    Type: AWS::EC2::Route
+    Properties:
+        DestinationCidrBlock: 0.0.0.0/0
+        GatewayId: !Ref publicNatGateway1
+        RouteTableId: !Ref routeTableforPrivateSubnet1
+  privateRoute2ToNatGW1: # route table of private subnet 2 add route to associate Nat gateway 1
+    Type: AWS::EC2::Route
+    Properties:
+        DestinationCidrBlock: 0.0.0.0/0
+        GatewayId: !Ref publicNatGateway1
+        RouteTableId: !Ref routeTableforPrivateSubnet2
+  privateRoute3ToNatGW1: # route table of private subnet 3 add route to associate Nat gateway 1
+    Type: AWS::EC2::Route
+    Properties:
+        DestinationCidrBlock: 0.0.0.0/0
+        GatewayId: !Ref publicNatGateway1
+        RouteTableId: !Ref routeTableforPrivateSubnet3

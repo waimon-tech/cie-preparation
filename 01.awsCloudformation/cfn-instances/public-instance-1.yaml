@@ -1,0 +1,14 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: 'Private Subnets in ap-southeast-1 default VPC'
+
+Resources:
+  publicInstance1: 
+    Type: AWS::EC2::Instance
+    Properties: 
+      InstanceType: 't2.micro'
+      AvailabilityZone: 'ap-southeast-1a'
+      ImageId: 'ami-0532913178263be11'
+      KeyName: 'gritworks-nonprod-sg'
+      Tags: 
+        - Key: 'Name'
+          Value: 'public-instance-1'

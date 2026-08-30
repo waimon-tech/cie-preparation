@@ -1,0 +1,129 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: 'Private Subnets in ap-southeast-1 default VPC'
+
+Resources:
+  privateSubnet1: # privateSubnet1
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: 'ap-southeast-1a'
+      CidrBlock: '172.31.48.0/20'
+      MapPublicIpOnLaunch: false
+      Tags: 
+        - Key: 'Name'
+          Value: 'default-private-subnet1'
+        - Key: 'Region'
+          Value: 'Singapore'
+        - Key: 'Environment'
+          Value: 'Non Production'    
+      VpcId: 'vpc-04ac99ec94a33769f'
+  routeTableforPrivateSubnet1: # route table for Private subnet 1
+    Type: AWS::EC2::RouteTable
+    Properties:
+      Tags: 
+        - Key: 'Name'
+          Value: 'Route Table For Private Subnet1'
+        - Key: 'Region'
+          Value: 'Singapore'
+        - Key: 'Environment'
+          Value: 'Non Production' 
+      VpcId: 'vpc-04ac99ec94a33769f'
+  privateSubnet1Association: # RT association for private subnet 1
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: 'rtb-0aba0086da6a9c0d7'
+      SubnetId: 'subnet-00829280eb8886678'
+
+
+  privateSubnet2: # privateSubnet2
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: 'ap-southeast-1b'
+      CidrBlock: '172.31.64.0/20'
+      MapPublicIpOnLaunch: false
+      Tags: 
+        - Key: 'Name'
+          Value: 'default-private-subnet2'
+        - Key: 'Region'
+          Value: 'Singapore'
+        - Key: 'Environment'
+          Value: 'Non Production'
+      VpcId: 'vpc-04ac99ec94a33769f'
+  routeTableforPrivateSubnet2: # route table for Private subnet 2
+    Type: AWS::EC2::RouteTable
+    Properties:
+      Tags: 
+        - Key: 'Name'
+          Value: 'Route Table For Private Subnet2'
+        - Key: 'Region'
+          Value: 'Singapore'
+        - Key: 'Environment'
+          Value: 'Non Production' 
+      VpcId: 'vpc-04ac99ec94a33769f'
+  privateSubnet2Association: # RT association for private subnet 2
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: 'rtb-0103907e45d76d731'
+      SubnetId: 'subnet-00a8d80149f344509'
+
+
+  privateSubnet3: # privateSubnet3
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: 'ap-southeast-1c'
+      CidrBlock: '172.31.80.0/20'
+      MapPublicIpOnLaunch: false
+      Tags: 
+        - Key: 'Name'
+          Value: 'default-private-subnet3'
+        - Key: 'Region'
+          Value: 'Singapore'
+        - Key: 'Environment'
+          Value: 'Non Production'
+      VpcId: 'vpc-04ac99ec94a33769f'
+  routeTableforPrivateSubnet3: # route table for Private subnet 3
+    Type: AWS::EC2::RouteTable
+    Properties:
+      Tags: 
+        - Key: 'Name'
+          Value: 'Route Table For Private Subnet3'
+        - Key: 'Region'
+          Value: 'Singapore'
+        - Key: 'Environment'
+          Value: 'Non Production' 
+      VpcId: 'vpc-04ac99ec94a33769f'
+  privateSubnet3Association: # RT association for private subnet 3
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: 'rtb-0f13061c8e9ba405d'
+      SubnetId: 'subnet-0f8bbc0e828a1f85f'
+
+  privateSubnet4: # privateSubnet4
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: 'ap-southeast-1a'
+      CidrBlock: '172.31.96.0/20'
+      MapPublicIpOnLaunch: false
+      Tags: 
+        - Key: 'Name'
+          Value: 'default-private-subnet4'
+        - Key: 'Region'
+          Value: 'Singapore'
+        - Key: 'Environment'
+          Value: 'Non Production'
+      VpcId: 'vpc-04ac99ec94a33769f'
+  routeTableforPrivateSubnet4: #route table for Private subnet 4
+    Type: AWS::EC2::RouteTable
+    Properties:
+      Tags: 
+        - Key: 'Name'
+          Value: 'Route Table For Private Subnet4'
+        - Key: 'Region'
+          Value: 'Singapore'
+        - Key: 'Environment'
+          Value: 'Non Production' 
+      VpcId: 'vpc-04ac99ec94a33769f'
+  privateSubnet4Association: # RT association for private subnet 4
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref routeTableforPrivateSubnet4
+      SubnetId: !Ref privateSubnet4
